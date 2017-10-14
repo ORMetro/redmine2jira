@@ -1,0 +1,77 @@
+{
+  "projects": [
+    {
+      "key": "PJ",
+      "issues": [
+        {
+          "key": "PJ-1152",
+          "reporter": "root",
+          "issueType": "Bug",
+          "summary": "My chore for today",
+          "description": "This is a sample Json import file for jira. For more details, got to https://confluence.atlassian.com/rootjiraserver071/importing-data-from-json-802592907.html",
+          "created": "2012-08-31T17:59:02.161+0100",
+          "status": "New",
+          "priority": "High",
+          "history": [
+            {
+              "author": "root",
+              "created": "2012-08-31T15:59:02.161+0100",
+              "items": [
+                {
+                  "field": "status",
+                  "fromString": "Yellow",
+                  "toString": "Red"
+                }
+              ]
+            },
+            {
+              "author": "root",
+              "created": "2012-08-31T17:59:02.161+0100",
+              "items": [
+                {
+                  "field": "Merge Request",
+                  "fromString": null,
+                  "toString": "http://somewhereonlyyouknow.com"
+                }
+              ]
+            }
+          ],
+          "customFieldValues": [
+            {
+              "fieldName": "QA-Contact",
+              "fieldType": "com.atlassian.jira.plugin.system.customfieldtypes:userpicker",
+              "value": "root"
+            },
+            {
+              "fieldName": "Merge Request",
+              "fieldType": "com.atlassian.jira.plugin.system.customfieldtypes:url",
+              "value": "https://somewhereonlyiknow.com"
+            }
+          ],
+          "comments": [
+            {
+              "body": "This is a comment from root 5 days ago",
+              "author": "root",
+              "created": "2012-08-31T17:59:02.161+0100"
+            },
+            {
+              "body": "This is a comment from root 1 day ago",
+              "author": "root",
+              "created": "2012-09-04T17:59:02.161+0100"
+            }
+          ],
+          "attachments": [
+            {
+              "name": "text.png",
+              "attacher": "root",
+              "created": "2017-06-27T19:55:42Z",
+              "uri": "http://attachment-server.host/2852/text.png",
+              "description": "File upload"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+

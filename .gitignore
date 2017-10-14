@@ -1,0 +1,7 @@
+.idea
+backups
+node_modules
+settings.ini
+backup.zip
+output.json
+issues.json*

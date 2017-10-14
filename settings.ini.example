@@ -1,0 +1,13 @@
+### Redmine specific
+redmineServerUrl = http://redmine.host
+apiKey = abcdefghi1234567890
+redmineProject = project
+redmineTicketReferenceMatcher = (?:CR)?#(\d*)
+
+attachmentServerAddress = http://attachment-server.host:3001
+
+### Jira specific
+jiraServerUrl = https://jira.host
+jiraUser = user
+jiraProject = project
+jiraProjectKey = PR

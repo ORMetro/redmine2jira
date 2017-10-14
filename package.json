@@ -1,0 +1,26 @@
+{
+  "name": "importer",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "babel-node src/migrate.js --presets es2015,stage-2",
+    "docker": "docker run --rm --name jira -p 8080:8080 -d cptactionhank/atlassian-jira-software",
+    "push-backup": "docker cp backup.zip jira:/var/atlassian/jira/import/ && docker exec -it --user=root jira chown daemon:daemon /var/atlassian/jira/import/backup.zip",
+    "pull-backup": "docker cp jira:/var/atlassian/jira/export/backup.zip backup.zip",
+    "attachment-server": "babel-node src/attachmentServer.js --presets es2015,stage-2"
+  },
+  "dependencies": {
+    "express": "^4.15.3",
+    "prompt-sync": "^4.1.5",
+    "properties-reader": "0.0.15",
+    "request": "^2.81.0",
+    "request-promise-native": "^1.0.3",
+    "xml2js-es6-promise": "^1.1.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1"
+  }
+}
