@@ -20,7 +20,10 @@ try {
 } catch (error) {
     issuePromise = RedmineConnector.getIssues()
         .then(function (issues) {
-            fs.writeFile('issues.json', JSON.stringify(issues));
+            fs.writeFile('issues.json', JSON.stringify(issues),
+                function(err, result) {
+                if(err) console.log('error', err);
+            });
 
             return Promise.resolve(issues);
         })

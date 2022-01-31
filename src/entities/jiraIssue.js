@@ -53,14 +53,13 @@ export default class JiraIssue {
         this.description = JiraIssue.correctText(redmineIssue['description']);
         this.created = redmineIssue['created_on'];
         this.updated = redmineIssue['updated_on'];
-        this.components = [redmineIssue['category']['name']];
+        if (redmineIssue['category']) {
+            this.components = [redmineIssue['category']['name']];
+        }
         if (redmineIssue['fixed_version']) {
             this.fixedVersions = [redmineIssue['fixed_version']['name']];
         }
-        this.status = redmineIssue['status']['name'];
-        if (this.status === 'Discarded' || this.status === 'Green') {
-            this.resolution = this.status;
-        }
+        this.status = Mappings.mapState(redmineIssue.status.id);
         this.priority = redmineIssue['priority']['name'];
         if (redmineIssue['assigned_to']) {
             this.assignee = UserMappings.mapUserToLogin(redmineIssue['assigned_to']['id'])
@@ -139,21 +138,25 @@ function extractComments(redmineJournal) {
 function createCustomFieldValues(redmineCustomFields) {
     const jiraCustomFields = [];
 
-    for (let i = 0; i < redmineCustomFields.length; i++) {
-        const redmineCustomField = redmineCustomFields[i];
-        if (redmineCustomField['value'] !== '') {
-            const name = redmineCustomField['name'];
-            const type = Mappings.CUSTOM_FIELD_TYPES[name];
+    console.log(redmineCustomFields);
 
-            if (!type) {
-                throw Error(`Could not map custom field type ${type}`);
+    if (redmineCustomFields) {
+        for (let i = 0; i < redmineCustomFields.length; i++) {
+            const redmineCustomField = redmineCustomFields[i];
+            if (redmineCustomField['value'] !== '') {
+                const name = redmineCustomField['name'];
+                const type = Mappings.CUSTOM_FIELD_TYPES[name];
+
+                if (!type) {
+                    throw Error(`Could not map custom field type ${type}`);
+                }
+
+                jiraCustomFields.push({
+                    'fieldName': name,
+                    'fieldType': type,
+                    'value': type.endsWith('userpicker') ? UserMappings.mapUserToLogin(redmineCustomField['value']) : redmineCustomField['value']
+                });
             }
-
-            jiraCustomFields.push({
-                'fieldName': name,
-                'fieldType': type,
-                'value': type.endsWith('userpicker') ? UserMappings.mapUserToLogin(redmineCustomField['value']) : redmineCustomField['value']
-            });
         }
     }
 

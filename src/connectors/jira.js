@@ -64,7 +64,9 @@ export default class JiraConnector {
             uri: `${BASE_URL}/rest/api/2/user`,
             method: 'POST',
             headers: {
-                'Authorization': `Basic ${AUTHORIZATION_HEADER}`
+                'Authorization': `Basic ${AUTHORIZATION_HEADER}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: {
                 name: login,

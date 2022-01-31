@@ -10,12 +10,29 @@ import UserMappings from "./userMappings";
 /**
  * Mapping from id to string for versions
  */
-const versionMapping = {};
+const versionMapping = {
+    '925': 'Backlog',
+    '1103': 'Backlog'
+};
 
 /**
  * Mapping from id to string for states
  */
-const statusMapping = {};
+const statusMapping = {
+    '1': 'To do',
+    '2': 'In progress',
+    '3': 'Needs review',
+    '4': 'Done',
+    '5': 'Done',
+    '6': 'Done',
+    '7': 'Done',
+    '9': 'Needs review',
+    '10': 'Needs review',
+    '11': 'Tp dp',
+    '12': 'In progress',
+    '13': 'Done',
+    '14': 'Done',
+};
 
 /**
  * Mapping from id to string for issue types
@@ -30,7 +47,13 @@ const customFieldMapping = {};
 /**
  * Mapping from id to string for issue priorities
  */
-const priorityMapping = {};
+const priorityMapping = {
+    'High': 'High',
+    'Medium': 'Medium',
+    'Low': 'Low',
+    'Urgent': 'Highest',
+    'Hair on fire': 'Highest'
+};
 
 /**
  * Mappings from id to string for components
@@ -100,7 +123,7 @@ export default class FieldMappings {
         const promises = [
             UserMappings.generateUserMapping(),
             generateMap(versionMapping, RedmineConnector.getVersions()),
-            generateMap(statusMapping, RedmineConnector.getIssueStates()),
+            // generateMap(statusMapping, RedmineConnector.getIssueStates()),
             generateMap(issueTypeMapping, RedmineConnector.getTrackerTypes()),
             generateMap(customFieldMapping, RedmineConnector.getCustomFields()),
             generateMap(priorityMapping, RedmineConnector.getPriorities()),
@@ -164,3 +187,4 @@ function mapValue(map, id, name) {
     }
     return value;
 }
+

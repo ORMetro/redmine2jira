@@ -55,8 +55,10 @@ export default class JiraHistory {
      */
     static extractLabels(redmineTags) {
         const labels = [];
-        for (let i = 0; i < redmineTags.length; i++) {
-            labels.push(redmineTags[i]['id']);
+        if (redmineTags) {
+            for (let i = 0; i < redmineTags.length; i++) {
+                labels.push(redmineTags[i]['id']);
+            }
         }
         return labels;
     }

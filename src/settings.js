@@ -41,13 +41,13 @@ export default class Settings {
             password = properties.get('jiraPassword');
             if (!password) {
                 try {
-                    password = prompt.hide(`Password for user ${this.getJiraUser()}: `);
+                    password = prompt.hide(`API Token for user ${this.getJiraUser()}: `);
                     if (!password) {
                         console.error('No password provided');
                         process.exit(-1);
                     }
                 } catch (error) {
-                    console.error('Can not request password from this terminal');
+                    console.error('Can not request API token from this terminal');
                     process.exit(-1);
                 }
             }
