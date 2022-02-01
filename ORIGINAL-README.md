@@ -16,7 +16,7 @@ For additional fanciness, we are using [babel-node](https://babeljs.io/docs/usag
 
 ## Preconditions
 The following preconditions have to be met for this to work correctly:
-1. Jira was started an the setup wizard is finished
+1. Jira was started and the setup wizard is finished
 2. All users, custom fields, priorities, states, issue types and other used fields are set up
 3. The workflow is set up (including screens) and the states are correctly linked to the workflow
 4. The project is created and links to the workflow, states, ... are set up correctly
