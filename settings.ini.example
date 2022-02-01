@@ -1,12 +1,13 @@
 ### Redmine specific
-redmineServerUrl = http://redmine.host
+redmineServerUrl = http://redmine.host/directory
 apiKey = abcdefghi1234567890
 redmineProject = project
 
-attachmentServerAddress = http://attachment-server.host:3001
+attachmentServerAddress = http://attachment-server.host/directory
 
 ### Jira specific
 jiraServerUrl = https://jira.host
-jiraUser = user
+jiraUser = user@domain
 jiraProject = project
 jiraProjectKey = PR
+jiraPassword = API_TOKEN
