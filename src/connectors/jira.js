@@ -14,7 +14,7 @@ const BASE_URL = Settings.getJiraHost();
 /**
  * The basic authorization header
  */
-const AUTHORIZATION_HEADER = new Buffer(`${Settings.getJiraUser()}:${Settings.getJiraPassword()}`).toString('base64');
+const AUTHORIZATION_HEADER = new Buffer.from(`${Settings.getJiraUser()}:${Settings.getJiraPassword()}`).toString('base64');
 
 /**
  * Class for interaction with the Jira REST API.

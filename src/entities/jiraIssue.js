@@ -47,7 +47,7 @@ export default class JiraIssue {
      */
     constructor(redmineIssue) {
         this.key = `${JIRA_PREFIX}-${redmineIssue['id']}`;
-        this.reporter = UserMappings.mapUserToLogin(redmineIssue['author']['id']);
+        this.reporter = UserMappings.mapUserToJiraId(redmineIssue['author']['id']);
         this.issueType = redmineIssue['tracker']['name'];
         this.summary = JiraIssue.correctText(redmineIssue['subject']);
         this.description = JiraIssue.correctText(redmineIssue['description']);
@@ -62,7 +62,7 @@ export default class JiraIssue {
         this.status = Mappings.mapState(redmineIssue.status.id);
         this.priority = redmineIssue['priority']['name'];
         if (redmineIssue['assigned_to']) {
-            this.assignee = UserMappings.mapUserToLogin(redmineIssue['assigned_to']['id'])
+            this.assignee = UserMappings.mapUserToJiraId(redmineIssue['assigned_to']['id'])
         }
         this.customFieldValues = createCustomFieldValues(redmineIssue['custom_fields']);
         this.attachments = createAttachments(redmineIssue['attachments']);
@@ -70,6 +70,10 @@ export default class JiraIssue {
         this.history = JiraHistory.createHistory(redmineIssue['journals']);
         this.labels = JiraHistory.extractLabels(redmineIssue['tags']);
         extractLinks(redmineIssue['relations'], redmineIssue['id']);
+        convertParentToLink(redmineIssue['parent'], redmineIssue['id']);
+        // if (this.attachments.length > 0) {
+        //     console.log(JSON.stringify(this));
+        // }
     }
 
     static getLinks() {
@@ -89,6 +93,20 @@ export default class JiraIssue {
 }
 
 
+function convertParentToLink(parent, id) {
+    if (!parent) {
+        return;
+    }
+
+    issueLinks.push({
+        name: 'Relates',
+        sourceId: `${JIRA_PREFIX}-${parent.id}`,
+        destinationId: `${JIRA_PREFIX}-${id}`
+    });
+}
+
+
+
 function extractLinks(relations, id) {
     if (!relations) {
         return;
@@ -101,11 +119,13 @@ function extractLinks(relations, id) {
                 console.warn(`Can not map relation type ${relations[i]['relation_type']}`);
                 continue;
             }
-            issueLinks.push({
-                name: name,
-                sourceId: `${JIRA_PREFIX}-${relations[i]['issue_id']}`,
-                destinationId: `${JIRA_PREFIX}-${relations[i]['issue_to_id']}`
-            });
+            if (name !== 'copied_to' && name !== 'copied_from') {
+                issueLinks.push({
+                    name: name,
+                    sourceId: `${JIRA_PREFIX}-${relations[i]['issue_id']}`,
+                    destinationId: `${JIRA_PREFIX}-${relations[i]['issue_to_id']}`
+                });
+            }
         }
     }
 }
@@ -121,7 +141,7 @@ function extractComments(redmineJournal) {
         if (redmineJournal[i]['notes']) {
             comments.push({
                 body: JiraIssue.correctText(redmineJournal[i]['notes']),
-                author: UserMappings.mapUserToLogin(redmineJournal[i]['user']['id']),
+                author: UserMappings.mapUserToJiraId(redmineJournal[i]['user']['id']),
                 created: redmineJournal[i]['created_on']
             });
         }
@@ -138,8 +158,6 @@ function extractComments(redmineJournal) {
 function createCustomFieldValues(redmineCustomFields) {
     const jiraCustomFields = [];
 
-    console.log(redmineCustomFields);
-
     if (redmineCustomFields) {
         for (let i = 0; i < redmineCustomFields.length; i++) {
             const redmineCustomField = redmineCustomFields[i];
@@ -154,7 +172,7 @@ function createCustomFieldValues(redmineCustomFields) {
                 jiraCustomFields.push({
                     'fieldName': name,
                     'fieldType': type,
-                    'value': type.endsWith('userpicker') ? UserMappings.mapUserToLogin(redmineCustomField['value']) : redmineCustomField['value']
+                    'value': type.endsWith('userpicker') ? UserMappings.mapUserToJiraId(redmineCustomField['value']) : redmineCustomField['value']
                 });
             }
         }
@@ -176,7 +194,7 @@ function createAttachments(redmineAttachments) {
 
         attachments.push({
             'name': redmineAttachment['filename'],
-            'attacher': UserMappings.mapUserToLogin(redmineAttachment['author']['id']),
+            'attacher': UserMappings.mapUserToJiraId(redmineAttachment['author']['id']),
             'created': redmineAttachment['created_on'],
             'uri': translateAttachmentUrl(redmineAttachment['content_url']),
             'description': redmineAttachment['description']

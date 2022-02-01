@@ -28,7 +28,7 @@ const API_KEY = Settings.getRedmineApiKey();
 /**
  * The basic authorization header for Jira
  */
-const AUTHORIZATION_HEADER = new Buffer(`${Settings.getJiraUser()}:${Settings.getJiraPassword()}`).toString('base64');
+const AUTHORIZATION_HEADER = new Buffer.from(`${Settings.getJiraUser()}:${Settings.getJiraPassword()}`).toString('base64');
 
 /**
  * The redmine project

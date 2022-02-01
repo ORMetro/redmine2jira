@@ -9,16 +9,20 @@ import RedmineConnector from '../connectors/redmine';
  * @type {Object}
  */
 const userMapping = {
-    363: {
-        'id': 363,
-        'login': 'anonymous',
-        'firstname': 'Anonymous',
-        'lastname': '',
-        'mail': 'anonymous@mail.com',
-        'created_on': '2012-01-01T00:00:00Z',
-        'api_key': 'abcdefghijklmnopqrstuvwxyz1234567890',
-        'status': 0
-    }
+    // Keys hold JSON objects generated from Redmine users
+    //     '111': {
+    //         id: 111,
+    //         login: 'grizzle.barr',
+    //         firstname: 'Grizzle',
+    //         lastname: 'Barr',
+    //         mail: 'grizzle.barr@example.com',
+    //         created_on: '2018-09-17T21:56:09Z',
+    //         last_login_on: '2022-01-24T18:08:24Z',
+    //  inUse must be true if you want to import the use to jira
+    //         inUse: true,
+    //  jiraId is required to map the user in Jira
+    //         jiraId: '8e420i5c001' // sometimes in the format 557058:1a511a-1a51-234c-9a26-00bd8f14ed12
+    //     },
 };
 
 export default class UserMappings {
@@ -55,6 +59,27 @@ export default class UserMappings {
 
         return user['login'];
     }
+
+    /**
+     * Returns the login of a user
+     *
+     * @param id The user's Redmine id
+     */
+    static mapUserToJiraId(id) {
+        const user = getUser(id);
+
+        if (!user) {
+            return null;
+        }
+
+        if (!user['jiraId']) {
+            console.warn(`User has no jiraId, using id! ${user}`);
+            return id;
+        }
+
+        return user['jiraId'];
+    }
+
 
     /**
      * Returns the full name of a user

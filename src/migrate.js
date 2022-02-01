@@ -38,8 +38,11 @@ issuePromise
     .then(addComponents)
     .then(addLinks)
     .then(exportToJsonFile)
-    .then(UserMappings.addUsersToJira)
+    // The line below will generate users in Jira and email people to invite them to join the project
+    // .then(UserMappings.addUsersToJira)
     .then(function () {
+        // You may like to debug Mappings
+        // console.log(Mappings);
         console.log('Done');
     })
     .catch(error => {

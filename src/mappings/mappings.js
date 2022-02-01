@@ -66,14 +66,10 @@ export default class FieldMappings {
      * See https://confluence.atlassian.com/adminjiraserver071/importing-data-from-json-802592907.html#ImportingdatafromJSON-CustomFields
      */
     static CUSTOM_FIELD_TYPES = {
-        'QA-Contact': 'com.atlassian.jira.plugin.system.customfieldtypes:userpicker',
-        'PDash Task': 'com.atlassian.jira.plugin.system.customfieldtypes:textfield',
-        'Freshdesk URL': 'com.atlassian.jira.plugin.system.customfieldtypes:url',
-        'Customer': 'com.atlassian.jira.plugin.system.customfieldtypes:textfield',
-        'Affected Version': 'com.atlassian.jira.plugin.system.customfieldtypes:textfield',
-        'Customer Issue': 'com.atlassian.jira.plugin.system.customfieldtypes:textfield',
-        'Merge Request': 'com.atlassian.jira.plugin.system.customfieldtypes:url',
-        'Patch Version': 'com.atlassian.jira.plugin.system.customfieldtypes:textfield'
+        // Example custom fields
+        // 'QA-Contact': 'com.atlassian.jira.plugin.system.customfieldtypes:userpicker',
+        // 'PDash Task': 'com.atlassian.jira.plugin.system.customfieldtypes:textfield',
+        // 'Freshdesk URL': 'com.atlassian.jira.plugin.system.customfieldtypes:url',
     };
 
     static ATTR_FIELDS = {
@@ -92,7 +88,8 @@ export default class FieldMappings {
         'start_date': 'start_date',
         'due_date': 'due_date',
         'estimated_hours': 'estimated_hours',
-        'sprint_id': 'sprint_id'
+        'sprint_id': 'sprint_id',
+        'story_points': 'story_points'
     };
 
     /**
@@ -111,7 +108,8 @@ export default class FieldMappings {
         'blocks': 'Blocks',
         'duplicates': 'Duplicate',
         'precedes': 'Predecessor',
-        'copied_to': 'Cloners'};
+        'copied_to': 'Cloners'
+    };
 
     /**
      * Generates mappings for lookups.
@@ -121,8 +119,10 @@ export default class FieldMappings {
         console.info('Generating mappings');
 
         const promises = [
-            UserMappings.generateUserMapping(),
+            // Users are hard-coded, but you may like to uncomment and debug.
+            // UserMappings.generateUserMapping(),
             generateMap(versionMapping, RedmineConnector.getVersions()),
+            // Issue states are hard-coded
             // generateMap(statusMapping, RedmineConnector.getIssueStates()),
             generateMap(issueTypeMapping, RedmineConnector.getTrackerTypes()),
             generateMap(customFieldMapping, RedmineConnector.getCustomFields()),
