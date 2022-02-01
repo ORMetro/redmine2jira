@@ -15,7 +15,7 @@ export default class JiraHistory {
 
         for (let i = 0; i < redmineJournal.length; i++) {
             const entry = {
-                author: UserMappings.mapUserToLogin(redmineJournal[i]['user']['id']),
+                author: UserMappings.mapUserToJiraId(redmineJournal[i]['user']['id']),
                 created: redmineJournal[i]['created_on'],
                 items: []
             };
@@ -49,14 +49,15 @@ export default class JiraHistory {
         return changes;
     }
 
-
     /**
      * Extracts labels for Jira from the given Redmine tags
      */
     static extractLabels(redmineTags) {
         const labels = [];
-        for (let i = 0; i < redmineTags.length; i++) {
-            labels.push(redmineTags[i]['id']);
+        if (redmineTags) {
+            for (let i = 0; i < redmineTags.length; i++) {
+                labels.push(redmineTags[i]['id']);
+            }
         }
         return labels;
     }
@@ -70,23 +71,10 @@ function getCustomFieldChange(detail) {
 
     switch (historyEntry.field) {
         case 'QA-Contact':
-            historyEntry.from = UserMappings.mapUserToLogin(detail['old_value']);
-            historyEntry.to = UserMappings.mapUserToLogin(detail['new_value']);
+            historyEntry.from = UserMappings.mapUserToJiraId(detail['old_value']);
+            historyEntry.to = UserMappings.mapUserToJiraId(detail['new_value']);
             historyEntry.fromString = UserMappings.mapUserToName(detail['old_value']);
             historyEntry.toString = UserMappings.mapUserToName(detail['new_value']);
-            break;
-        case 'Patch Version':
-            historyEntry.fromString = Mappings.mapVersion(detail['old_value']);
-            historyEntry.toString = Mappings.mapVersion(detail['new_value']);
-            break;
-        case 'Merge Request':
-        case 'Customer':
-        case 'Affected Version':
-        case 'Customer Issue':
-        case 'PDash Task':
-        case 'Freshdesk URL':
-            historyEntry.fromString = detail['old_value'];
-            historyEntry.toString = detail['new_value'];
             break;
         case undefined: // Custom field deleted in Redmine and not accessible anymore
             return null;
@@ -116,8 +104,8 @@ function getAttributeChange(detail) {
             historyEntry.toString = Mappings.mapPriority(detail['new_value']);
             break;
         case 'assignee':
-            historyEntry.from = UserMappings.mapUserToLogin(detail['old_value']);
-            historyEntry.to = UserMappings.mapUserToLogin(detail['new_value']);
+            historyEntry.from = UserMappings.mapUserToJiraId(detail['old_value']);
+            historyEntry.to = UserMappings.mapUserToJiraId(detail['new_value']);
             historyEntry.fromString = UserMappings.mapUserToName(detail['old_value']);
             historyEntry.toString = UserMappings.mapUserToName(detail['new_value']);
             break;
@@ -133,6 +121,7 @@ function getAttributeChange(detail) {
             historyEntry.fromString = Mappings.mapCategory(detail['old_value']);
             historyEntry.toString = Mappings.mapCategory(detail['new_value']);
             break;
+        case 'story_points':
         case 'done_ratio':
         case 'project_id':
         case 'start_date':
@@ -156,7 +145,7 @@ function getAttributeChange(detail) {
             historyEntry.toString = detail['new_value'];
             break;
         default:
-            console.error(`Could not translate attr change: No match for field name ${historyEntry.field}`);
+            console.error(`Could not translate attr change: No match for field name ${historyEntry.field}. Detail data is ${JSON.stringify(detail)}`);
     }
 
     if (!historyEntry.fromString && !historyEntry.toString) {

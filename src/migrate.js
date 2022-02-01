@@ -20,7 +20,10 @@ try {
 } catch (error) {
     issuePromise = RedmineConnector.getIssues()
         .then(function (issues) {
-            fs.writeFile('issues.json', JSON.stringify(issues));
+            fs.writeFile('issues.json', JSON.stringify(issues),
+                function(err, result) {
+                if(err) console.log('error', err);
+            });
 
             return Promise.resolve(issues);
         })
@@ -35,8 +38,11 @@ issuePromise
     .then(addComponents)
     .then(addLinks)
     .then(exportToJsonFile)
-    .then(UserMappings.addUsersToJira)
+    // The line below will generate users in Jira and email people to invite them to join the project
+    // .then(UserMappings.addUsersToJira)
     .then(function () {
+        // You may like to debug Mappings
+        // console.log(Mappings);
         console.log('Done');
     })
     .catch(error => {

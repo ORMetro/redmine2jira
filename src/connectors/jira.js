@@ -14,7 +14,7 @@ const BASE_URL = Settings.getJiraHost();
 /**
  * The basic authorization header
  */
-const AUTHORIZATION_HEADER = new Buffer(`${Settings.getJiraUser()}:${Settings.getJiraPassword()}`).toString('base64');
+const AUTHORIZATION_HEADER = new Buffer.from(`${Settings.getJiraUser()}:${Settings.getJiraPassword()}`).toString('base64');
 
 /**
  * Class for interaction with the Jira REST API.
@@ -64,7 +64,9 @@ export default class JiraConnector {
             uri: `${BASE_URL}/rest/api/2/user`,
             method: 'POST',
             headers: {
-                'Authorization': `Basic ${AUTHORIZATION_HEADER}`
+                'Authorization': `Basic ${AUTHORIZATION_HEADER}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: {
                 name: login,
